@@ -2,15 +2,14 @@
   <div id="app">
     <header class="app-header">
       <div class="header-container">
-        <h1>📚 Biblioteca de Libros</h1>
-        <p class="header-subtitle">Gestiona tu colección personal</p>
+        <h1>Biblioteca de Libros</h1>
       </div>
     </header>
 
     <main class="container">
       <div class="main-actions">
         <button class="create-btn" @click="openForm">
-          <span class="btn-icon">📖</span>
+          <span class="btn-icon"></span>
           Crear libro
         </button>
       </div>
