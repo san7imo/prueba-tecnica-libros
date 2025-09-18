@@ -162,6 +162,8 @@ El frontend estará disponible en: [http://localhost:5173](http://localhost:5173
 ---
 
 ## Estructura: 
+
+```
 prueba-tecnica-libros/
 ├── bin/                      # Scripts ejecutables de Symfony
 ├── composer.json             # Dependencias PHP
@@ -213,7 +215,7 @@ prueba-tecnica-libros/
     ├── tsconfig.app.json
     ├── tsconfig.node.json
     └── vite.config.ts        # Configuración de Vite
-
+```
 
 ---
 
