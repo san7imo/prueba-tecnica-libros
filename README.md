@@ -163,7 +163,7 @@ El frontend estará disponible en: [http://localhost:5173](http://localhost:5173
 
 ## Estructura: 
 
-```
+```bash
 prueba-tecnica-libros/
 ├── bin/                      # Scripts ejecutables de Symfony
 ├── composer.json             # Dependencias PHP
@@ -234,4 +234,4 @@ Para escalar la aplicación, consideraría las siguientes mejoras:
 ## Información del Branch y Commit
 
 - **Branch a evaluar:** main  
-- **Commit final:** []  
+- **Commit final:** 
