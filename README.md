@@ -1,71 +1,123 @@
-# Prueba Técnica - Sistema de Libros y Reseñas
+# Prueba Técnica - Sistema de Gestión de Libros y Reseñas
 
-Sistema web para gestionar libros y sus reseñas, desarrollado con Symfony 6 + Vue 3.
+Este es un sistema web para la gestión de una biblioteca de libros y sus reseñas, desarrollado con **Symfony 6** para el backend (API REST) y **Vue 3** para el frontend. 
+
+---
+
+## Evolución del Proyecto
+
+El desarrollo se realizó en fases, reflejadas en los siguientes commits:
+
+- **Primer Commit (Requerimientos Mínimos):**  
+  Se completaron los requisitos iniciales de la prueba.  
+  Se implementaron los modelos (`Book` y `Review`), las migraciones, las fixtures y los endpoints `GET /api/books` y `POST /api/reviews`.  
+  Se incluyó una vista básica en Vue 3 que consume la API.
+
+- **Commits Adicionales (Mejoras y Expansión):**  
+  Se extendió la funcionalidad para implementar un **CRUD completo** (Crear, Leer, Actualizar, Borrar) para libros y reseñas.  
+  Se realizaron mejoras significativas en la interfaz de usuario del frontend para ofrecer una experiencia más completa e interactiva.
+
+---
+
+## Características Principales
+
+- **Backend Robusto:** API RESTful construida con Symfony 6, Doctrine ORM y Doctrine Migrations.
+- **Frontend Dinámico:** Interfaz de usuario intuitiva en Vue 3 (Composition API) que consume la API con Axios.
+- **CRUD Completo:** Permite crear, leer, actualizar y eliminar libros y reseñas.
+- **Validación de Datos:** Reglas de validación en el backend para garantizar la integridad de los datos, incluyendo:
+  - Rating debe estar entre 1 y 5.
+  - `book_id` debe existir.
+  - `comment` no puede estar vacío.
+- **Rendimiento:** El promedio de calificación (`average_rating`) se calcula de forma eficiente usando una consulta DQL con `AVG()`.
+
+---
 
 ## Requisitos del Sistema
 
-- PHP 8.1 o superior
-- Composer
-- MySQL 8.0 o superior (o MariaDB 10.3+)
-- Node.js 16+ y npm
-- Symfony CLI (opcional pero recomendado)
+- PHP 8.1+ y Composer  
+- MySQL 8.0+ (o equivalente como MariaDB)  
+- Node.js 16+ y npm  
+- Symfony CLI (opcional pero recomendado)  
 
-## Instalación
+---
 
-### 1. Clonar el repositorio
+## Instalación y Configuración
+
+### 1. Clonar el Repositorio
 ```bash
 git clone https://github.com/san7imo/prueba-tecnica-libros.git
 cd prueba-tecnica-libros
 ```
 
-### 2. Configurar el Backend (Symfony)
-
+### 2. Configuración del Backend (Symfony)
 ```bash
-# Copiar archivo de configuración
+# Copia el archivo de configuración de entorno
 cp .env.example .env
 
-# Editar .env y configurar la conexión a la base de datos
-# DATABASE_URL="mysql://root:password@127.0.0.1:3306/prueba_libros?serverVersion=8.0.32&charset=utf8mb4"
+# Edita el archivo .env para configurar tu base de datos
+# Ejemplo: DATABASE_URL="mysql://root:password@127.0.0.1:3306/prueba_libros?serverVersion=8.0.32&charset=utf8mb4"
 
-# Instalar dependencias
+# Instala las dependencias de Composer
 composer install
 
-# Crear la base de datos
+# Crea la base de datos
 php bin/console doctrine:database:create
 
-# Ejecutar migraciones
+# Ejecuta las migraciones de Doctrine para crear las tablas
 php bin/console doctrine:migrations:migrate
 
-# Cargar datos de prueba (fixtures)
+# Carga los datos de prueba iniciales (fixtures)
 php bin/console doctrine:fixtures:load
 
-# Iniciar servidor de desarrollo
+# Inicia el servidor de desarrollo de Symfony
 symfony server:start
-# O alternativamente: php -S localhost:8000 -t public/
+# (Alternativa: php -S localhost:8000 -t public/)
 ```
 
-### 3. Configurar el Frontend (Vue 3)
+El backend de la API estará disponible en: [http://localhost:8000](http://localhost:8000)
 
+---
+
+### 3. Configuración del Frontend (Vue 3)
 ```bash
-# Navegar al directorio frontend
+# Navega al directorio del frontend
 cd frontend
 
-# Instalar dependencias
+# Instala las dependencias de Node.js
 npm install
 
-# Iniciar servidor de desarrollo
+# Inicia el servidor de desarrollo de Vite
 npm run dev
 ```
 
-El frontend estará disponible en: http://localhost:3000
-El backend API estará disponible en: http://localhost:8000
+El frontend estará disponible en: [http://localhost:5173](http://localhost:5173)  
+*(Corrección: Vite usa el puerto 5173 por defecto)*
+
+---
 
 ## Endpoints de la API
 
-### GET /api/books
-Obtiene la lista de libros con su calificación promedio.
+### Libros
+| Método | Endpoint             | Descripción                     |
+|--------|----------------------|---------------------------------|
+| GET    | `/api/books`         | Lista todos los libros con su calificación promedio. |
+| POST   | `/api/books`         | Crea un nuevo libro.            |
+| PUT    | `/api/books/{id}`    | Actualiza un libro existente.   |
+| DELETE | `/api/books/{id}`    | Elimina un libro.               |
 
-**Respuesta de ejemplo:**
+### Reseñas
+| Método | Endpoint                     | Descripción                               |
+|--------|------------------------------|-------------------------------------------|
+| GET    | `/api/books/{bookId}/reviews`| Obtiene todas las reseñas de un libro específico. |
+| POST   | `/api/reviews`               | Crea una nueva reseña para un libro.      |
+| DELETE | `/api/reviews/{id}`          | Elimina una reseña.                       |
+
+---
+
+## Ejemplos de Peticiones y Respuestas
+
+### GET /api/books 
+**Respuesta exitosa:**
 ```json
 [
   {
@@ -73,25 +125,11 @@ Obtiene la lista de libros con su calificación promedio.
     "author": "Donald Knuth",
     "published_year": 1968,
     "average_rating": 4.7
-  },
-  {
-    "title": "Clean Code",
-    "author": "Robert C. Martin",
-    "published_year": 2008,
-    "average_rating": 3.5
-  },
-  {
-    "title": "Refactoring",
-    "author": "Martin Fowler",
-    "published_year": 1999,
-    "average_rating": 5.0
   }
 ]
 ```
 
-### POST /api/reviews
-Crea una nueva reseña para un libro.
-
+### POST /api/reviews 
 **Request body:**
 ```json
 {
@@ -121,113 +159,77 @@ Crea una nueva reseña para un libro.
   }
 }
 ```
+---
 
-## Ejemplos de uso con cURL
+## Estructura: 
+prueba-tecnica-libros/
+├── bin/                      # Scripts ejecutables de Symfony
+├── composer.json             # Dependencias PHP
+├── composer.lock
+├── config/                   # Configuración de Symfony (doctrine, bundles, routes, etc.)
+├── migrations/               # Migraciones generadas por Doctrine
+├── public/                   # Carpeta pública (entrypoint: index.php)
+├── src/                      # Código fuente del backend Symfony
+│   ├── Controller/           # Controladores API REST
+│   │   ├── BookController.php
+│   │   └── ReviewController.php
+│   ├── DataFixtures/         # Datos de prueba para la BD
+│   │   ├── AppFixtures.php
+│   │   └── BookFixtures.php
+│   ├── Entity/               # Entidades Doctrine (mapeo de tablas)
+│   │   ├── Book.php
+│   │   └── Review.php
+│   ├── Repository/           # Repositorios para consultas personalizadas
+│   │   ├── BookRepository.php
+│   │   └── ReviewRepository.php
+│   └── Kernel.php            # Kernel principal de Symfony
+├── symfony.lock
+├── var/                      # Cachés y logs de Symfony
+├── vendor/                   # Dependencias PHP instaladas con Composer
+├── README.md                 # Documentación principal
+└── frontend/                 # Aplicación frontend Vue 3 + Vite
+    ├── env.d.ts              # Tipos de entorno
+    ├── eslint.config.ts      # Configuración de ESLint
+    ├── index.html            # HTML base de Vite
+    ├── node_modules/         # Dependencias de Node.js
+    ├── package.json          # Dependencias y scripts frontend
+    ├── package-lock.json
+    ├── public/               # Archivos públicos frontend
+    ├── README.md             # Documentación del frontend
+    ├── src/                  # Código fuente del frontend
+    │   ├── App.vue           # Componente raíz Vue
+    │   ├── components/       # Componentes UI
+    │   │   ├── BookForm.vue
+    │   │   ├── BookList.vue
+    │   │   ├── ReviewForm.vue
+    │   │   └── ReviewList.vue
+    │   ├── main.ts           # Punto de entrada Vue
+    │   ├── services/         # Servicios API (axios)
+    │   │   └── api.ts
+    │   ├── shims-vue.d.ts    # Definiciones TS para Vue
+    │   ├── style.css         # Estilos globales
+    │   └── types.ts          # Tipos TS (Book, Review, etc.)
+    ├── tsconfig.json         # Configuración TypeScript
+    ├── tsconfig.app.json
+    ├── tsconfig.node.json
+    └── vite.config.ts        # Configuración de Vite
 
-### Obtener libros:
-```bash
-curl -X GET http://localhost:8000/api/books
-```
 
-### Crear una reseña:
-```bash
-curl -X POST http://localhost:8000/api/reviews \
-  -H "Content-Type: application/json" \
-  -d '{
-    "book_id": 1,
-    "rating": 4,
-    "comment": "Muy buen libro, lo recomiendo"
-  }'
-```
-
-### Ejemplo de error de validación:
-```bash
-curl -X POST http://localhost:8000/api/reviews \
-  -H "Content-Type: application/json" \
-  -d '{
-    "book_id": 999,
-    "rating": 6,
-    "comment": ""
-  }'
-```
-
-## Datos de Prueba
-
-El sistema incluye los siguientes datos iniciales:
-
-**Libros:**
-1. "El Arte de Programar" - Donald Knuth (1968)
-2. "Clean Code" - Robert C. Martin (2008)  
-3. "Refactoring" - Martin Fowler (1999)
-
-**Reseñas:** 6 reseñas distribuidas entre los libros con ratings variados (1-5).
-
-## Validaciones Implementadas
-
-- **Rating:** Debe ser un entero entre 1 y 5 (inclusive)
-- **Book ID:** Debe existir en la base de datos
-- **Comment:** No puede estar vacío
-- **Cálculo de promedio:** Se calcula usando AVG() en la consulta SQL para eficiencia
+---
 
 ## Escalabilidad
 
-**¿Qué cambiarías para escalar esta app a cientos de miles de libros y usuarios?**
+Para escalar la aplicación, consideraría las siguientes mejoras:
 
-Para escalar la aplicación consideraría:
+1. **Base de Datos:** Implementar índices en campos de búsqueda (title, author). Para grandes volúmenes de datos, considerar sharding horizontal.
+2. **Mecanismos de Caché:** Redis o Memcached para cachear datos como promedios de calificación.
+3. **Optimización de API:** Implementar paginación y rate limiting.
+4. **Microservicios:** Separar en servicios independientes (books-service, reviews-service).
+5. **Procesamiento Asíncrono:** Usar colas de jobs (RabbitMQ, Redis Queue) para cálculos de promedios.
 
-1. **Base de datos:** Implementar índices en campos de búsqueda frecuente, considerar sharding horizontal y usar réplicas de lectura.
+---
 
-2. **Cache:** Redis/Memcached para cachear promedios de ratings y listas de libros más consultados.
+## Información del Branch y Commit
 
-3. **API:** Implementar paginación en endpoints, rate limiting, y versionado de API.
-
-4. **Arquitectura:** Separar en microservicios (books-service, reviews-service), implementar CQRS para separar lecturas de escrituras.
-
-5. **Frontend:** Lazy loading, virtual scrolling para listas grandes, y CDN para assets estáticos.
-
-6. **Infraestructura:** Load balancers, containers con Kubernetes, monitoreo con Prometheus/Grafana.
-
-7. **Procesamiento:** Cola de jobs asíncronos (RabbitMQ/Redis Queue) para recálculo de promedios.
-
-## Estructura del Proyecto
-
-```
-prueba-tecnica-libros/
-├── src/
-│   ├── Controller/
-│   │   ├── BookController.php
-│   │   └── ReviewController.php
-│   ├── Entity/
-│   │   ├── Book.php
-│   │   └── Review.php
-│   ├── Repository/
-│   │   ├── BookRepository.php
-│   │   └── ReviewRepository.php
-│   └── DataFixtures/
-│       └── BookFixtures.php
-├── frontend/
-│   ├── src/
-│   │   ├── App.vue
-│   │   ├── main.js
-│   │   └── style.css
-│   ├── index.html
-│   ├── package.json
-│   └── vite.config.js
-├── migrations/
-├── config/
-├── .env.example
-├── composer.json
-└── README.md
-```
-
-## Información del Branch
-
-- **Branch evaluado:** main
-- **Commit final:** [Insertar hash del último commit]
-
-## Tecnologías Utilizadas
-
-- **Backend:** Symfony 6, Doctrine ORM, MySQL
-- **Frontend:** Vue 3 (Composition API), Axios, Vite
-- **Validaciones:** Symfony Validator
-- **CORS:** NelmioCorsBundle
+- **Branch a evaluar:** main  
+- **Commit final:** []  
