@@ -2,22 +2,29 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ReviewRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReviewRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['review:read']],
+    denormalizationContext: ['groups' => ['review:write']]
+)]
 class Review
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['review:read', 'book:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'reviews')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull(message: 'El libro es requerido')]
+    #[Groups(['review:read', 'review:write'])]
     private ?Book $book = null;
 
     #[ORM\Column]
@@ -27,13 +34,16 @@ class Review
         max: 5,
         notInRangeMessage: 'El rating debe estar entre {{ min }} y {{ max }}'
     )]
+    #[Groups(['review:read', 'review:write', 'book:read'])]
     private ?int $rating = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: 'text')]
     #[Assert\NotBlank(message: 'El comentario no puede estar vacío')]
+    #[Groups(['review:read', 'review:write', 'book:read'])]
     private ?string $comment = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: 'datetime')]
+    #[Groups(['review:read', 'book:read'])]
     private ?\DateTimeInterface $created_at = null;
 
     public function __construct()

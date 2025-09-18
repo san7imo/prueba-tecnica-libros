@@ -28,12 +28,15 @@ class BookRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('b')
             ->leftJoin('b.reviews', 'r')
-            ->select('b.title, b.author, b.published_year, AVG(r.rating) as average_rating')
+            ->select('b.id, b.title, b.author, b.published_year, AVG(r.rating) as average_rating')
             ->groupBy('b.id')
             ->getQuery()
             ->getResult();
     }
 
+    /**
+     * Guarda un libro
+     */
     public function save(Book $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -43,6 +46,9 @@ class BookRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * Elimina un libro
+     */
     public function remove(Book $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);

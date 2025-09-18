@@ -14,7 +14,7 @@ Sistema web para gestionar libros y sus reseñas, desarrollado con Symfony 6 + V
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/tu-usuario/prueba-tecnica-libros.git
+git clone https://github.com/san7imo/prueba-tecnica-libros.git
 cd prueba-tecnica-libros
 ```
 
