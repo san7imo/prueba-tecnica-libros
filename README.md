@@ -234,4 +234,4 @@ Para escalar la aplicación, consideraría las siguientes mejoras:
 ## Información del Branch y Commit
 
 - **Branch a evaluar:** main  
-- **Commit final:** 
+- **Commit final:** 159880dcb079e6a19c569b644078390302712335
